@@ -1,0 +1,48 @@
+version: "3"
+services:
+  chrome:
+    restart: on-failure
+    image: selenium/standalone-chrome
+    shm_size: 2gb
+    environment:
+      VNC_NO_PASSWORD: 1
+    ports:
+      - ${PUBLIC_VNC_PORT}:7900
+
+  php:
+    restart: on-failure
+    build:
+      context: ./../
+      dockerfile: ./docker/php/Dockerfile
+      args:
+        - PUID=${PUID}
+        - PGID=${PGID}
+        - INSTALL_XDEBUG=${INSTALL_XDEBUG}
+    volumes:
+      - ./../:/var/www
+    working_dir: "/var/www"
+    extra_hosts:
+      - "host.docker.internal:172.100.0.1"
+    environment:
+      PHP_IDE_CONFIG: serverName=hurma-automation
+      CHROME_WEB_DRIVER_URL: http://chrome:4444/wd/hub/
+      BASE_URL: http://localhost:${PUBLIC_PORT}
+      CHROME_VNC_URL: http://localhost:${PUBLIC_VNC_PORT}
+
+  nginx:
+    restart: on-failure
+    image: nginx:latest
+    ports:
+      - ${PUBLIC_PORT}:80
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/.htpasswd:/etc/nginx/.htpasswd
+      - ./../web/assets:/var/www/web/assets
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.100.0.0/24
+          gateway: "172.100.0.1"

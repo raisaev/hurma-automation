@@ -1,0 +1,6 @@
+.idea
+.git
+.dockerignore
+vendor
+.env.local
+tmp

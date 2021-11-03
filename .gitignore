@@ -1,5 +1,10 @@
+/.idea
 /.env.local
 /.env.local.php
 /.env.*.local
-/var/
+
+/config/*.local.php
+/docker/*.json
+
+/tmp/
 /vendor/
