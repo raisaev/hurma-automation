@@ -39,6 +39,11 @@ return static function (ContainerConfigurator $configurator): void {
     $services->get(Kernel::class)
         ->arg('$rootDir', param('project.root_dir'));
 
+    $services->get(IndexController::class)
+        ->arg('$defaultSpreadsheetId', env('GOOGLE_DEFAULT_SPREADSHEET_ID')->string())
+        ->arg('$defaultSheetName', env('GOOGLE_DEFAULT_SHEET_NAME')->string())
+        ->arg('$defaultRange', env('GOOGLE_DEFAULT_SHEET_RANGE')->string());
+
     $services->get(Hurma::class)
         ->arg('$url', env('HURMA_URL')->string())
         ->arg('$login', env('HURMA_LOGIN'))

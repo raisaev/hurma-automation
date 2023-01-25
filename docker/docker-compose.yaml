@@ -1,7 +1,7 @@
 version: "3"
 services:
   chrome:
-    restart: on-failure
+    restart: always
     image: selenium/standalone-chrome
     shm_size: 2gb
     environment:
@@ -10,7 +10,7 @@ services:
       - ${PUBLIC_VNC_PORT}:7900
 
   php:
-    restart: on-failure
+    restart: always
     build:
       context: ./../
       dockerfile: ./docker/php/Dockerfile
@@ -30,7 +30,7 @@ services:
       CHROME_VNC_URL: http://localhost:${PUBLIC_VNC_PORT}
 
   nginx:
-    restart: on-failure
+    restart: always
     image: nginx:latest
     ports:
       - ${PUBLIC_PORT}:80

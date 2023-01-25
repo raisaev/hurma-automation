@@ -53,8 +53,11 @@ class ProcessCoinsCommand extends Command
 
         $table = new Table($output);
         $table->setHeaders(['name', 'result']);
-        foreach ($result as $name => $row) {
-            $table->addRow([$name, $row]);
+        foreach ($result as $row) {
+            $table->addRow([
+                explode('|', $row)[0] ?? '--',
+                explode('|', $row)[1] ?? '--',
+            ]);
         }
         $table->render();
 

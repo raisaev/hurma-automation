@@ -110,10 +110,10 @@ use Symfony\Component\Templating\PhpEngine;
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($result as $name => $status) : ?>
+            <?php foreach ($result as $row) : ?>
                 <tr>
-                    <td><?= $name ?></td>
-                    <td><?= $status ?></td>
+                    <td><?= explode('|', $row)[0] ?? '--' ?></td>
+                    <td><?= explode('|', $row)[1] ?? '--' ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

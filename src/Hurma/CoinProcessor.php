@@ -52,7 +52,7 @@ class CoinProcessor
             $record = $this->recordFactory->create($range, ++$index);
 
             if ($record->coinCount === 0 || $record->isStatusDone() || in_array($record->name, $ignored, true)) {
-                $processed[$record->name] = $record::STATUS_SKIPPED;
+                $processed[] = $record->name . '|' . $record::STATUS_SKIPPED;
                 continue;
             }
 
@@ -64,11 +64,11 @@ class CoinProcessor
                     'not found'
                 );
 
-                $processed[$record->name] = $record::STATUS_NOT_FOUND;
+                $processed[] = $record->name . '|' . $record::STATUS_NOT_FOUND;
                 continue;
             }
 
-            $processed[$record->name] = $record::STATUS_DONE;
+            $processed[] = $record->name . '|' . $record::STATUS_DONE;
             if ($dryRun) {
                 continue;
             }
@@ -78,7 +78,7 @@ class CoinProcessor
                 $message = $record::STATUS_DONE;
             } catch (\Throwable $e) {
                 $message = "error: {$e->getMessage()}";
-                $processed[$record->name] = $message;
+                $processed[] = $record->name . '|' . $message;
             }
 
             $this->sheets->writeCell(

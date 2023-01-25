@@ -21,6 +21,9 @@ class IndexController
     public function __construct(
         private readonly Kernel $kernel,
         private readonly CoinProcessor $coinProcessor,
+        private readonly string $defaultSpreadsheetId,
+        private readonly string $defaultSheetName,
+        private readonly string $defaultRange,
     ) {
     }
 
@@ -43,9 +46,9 @@ class IndexController
             [
                 'title'         => 'Hurma: automated Kate',
                 'kernel'        => $this->kernel,
-                'spreadsheetId' => $session->get('spreadsheetId'),
-                'sheetName'     => $session->get('sheetName'),
-                'range'         => $session->get('range'),
+                'spreadsheetId' => $session->get('spreadsheetId') ?? $this->defaultSpreadsheetId,
+                'sheetName'     => $session->get('sheetName') ?? $this->defaultSheetName,
+                'range'         => $session->get('range') ?? $this->defaultRange,
                 'messages'      => $session->getFlashBag()->all(),
                 'result'        => $request->getSession()->get('result', []),
             ]
