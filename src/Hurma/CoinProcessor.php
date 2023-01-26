@@ -172,5 +172,7 @@ class CoinProcessor
         $this->client->getDriver()
             ->findElements(WebDriverBy::xpath('//div[@id="editModalRequest"]//button[contains(@class, "btn")]'))[0]
             ->click();
+
+        usleep(500_000);
     }
 }
