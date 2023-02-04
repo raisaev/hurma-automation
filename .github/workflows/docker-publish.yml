@@ -12,7 +12,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         include:
           - dockerfile: ./docker/php/Dockerfile
