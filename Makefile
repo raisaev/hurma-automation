@@ -1,3 +1,5 @@
+args = $(foreach a,$($(subst -,_,$1)_args),$(if $(value $a),$a="$($a)"))
+
 .ONESHELL: # Applies to every targets in the file!
 .PHONY:
 
@@ -29,9 +31,10 @@ user-show:
 
 .SILENT:user-add
 user-add:
-	if [ "${userName}" = "" ]; then \
-	    echo "\033[0;31m"userName ARG must be provided; \
+	if [ "${user}" = "" ]; then \
+	    echo "\033[0;31m"user must be provided: user=%user%; \
  		exit 1;
 	fi
-	${DOCKER_COMPOSE} exec nginx sh -c "echo -n '${userName}:' >> /etc/nginx/.htpasswd"
+
+	${DOCKER_COMPOSE} exec nginx sh -c "echo -n '${user}:' >> /etc/nginx/.htpasswd"
 	${DOCKER_COMPOSE} exec nginx sh -c 'openssl passwd -apr1 >> /etc/nginx/.htpasswd'
