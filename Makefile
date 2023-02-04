@@ -6,14 +6,25 @@ args = $(foreach a,$($(subst -,_,$1)_args),$(if $(value $a),$a="$($a)"))
 DOCKER_COMPOSE = docker-compose -f ./docker/docker-compose.yaml --env-file ./docker/.env
 
 up:
-	${DOCKER_COMPOSE} up -d --remove-orphans
+	${DOCKER_COMPOSE} up -d --remove-orphans --build
 
 down:
+	${DOCKER_COMPOSE} down
+
+destroy:
 	${DOCKER_COMPOSE} down -v --rmi=all --remove-orphans
 
 build:
-	make validate-cs validate-psalm
+	make validate-cs validate-psalm &&
 	${DOCKER_COMPOSE} build
+
+release:
+	helm upgrade -i "hurma-automation" .helm \
+		-f .helm/values.local.yaml \
+		--namespace=hurma \
+		--create-namespace \
+		--atomic \
+		--history-max=3
 
 ##################
 

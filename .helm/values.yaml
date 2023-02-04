@@ -1,0 +1,44 @@
+terminationWaitSeconds: 5
+terminationGracePeriodSeconds: 15
+
+ingress:
+  domain: ""
+  whitelistSourceRange: ""
+  clusterIssuer: "cluster-issuer"
+
+hurma:
+  login: ""
+  password: ""
+
+google:
+  projectId: ""
+
+nginx:
+  image: "ghcr.io/raisaev/hurma-automation/nginx:master"
+  resources:
+    limits:
+      cpu: "0.1"
+      memory: "100Mi"
+    requests:
+      cpu: "0.05"
+      memory: "50Mi"
+
+php:
+  image: "ghcr.io/raisaev/hurma-automation/php:master"
+  resources:
+    limits:
+      cpu: "0.1"
+      memory: "100Mi"
+    requests:
+      cpu: "0.05"
+      memory: "50Mi"
+
+chrome:
+  image: "selenium/standalone-chrome:109.0"
+  resources:
+    limits:
+      cpu: "0.1"
+      memory: "100Mi"
+    requests:
+      cpu: "0.05"
+      memory: "50Mi"

@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+      annotations:
+        checksum/config-map: {{ include (print .Template.BasePath "/ConfigMap.yaml" ) . | sha256sum | quote }}
+    spec:
+      serviceAccountName: {{ .Chart.Name }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      containers:
+        - name: nginx
+          image: {{ .Values.nginx.image }}
+          imagePullPolicy: IfNotPresent
+          resources:
+          {{- toYaml .Values.nginx.resources  | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/nginx
+              name: nginx
+
+        - name: php
+          image: {{ .Values.php.image }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: BASE_URL
+              value: {{ .Values.ingress.domain }}
+            - name: CHROME_WEB_DRIVER_URL
+              value: "http://localost:4444/wd/hub/"
+            - name: CHROME_VNC_URL
+              value: "{{ .Values.ingress.domain }}/vnc"
+
+            - name: HURMA_LOGIN
+              value: {{ .Values.hurma.login }}
+            - name: HURMA_PASSWORD
+              value: {{ .Values.hurma.password }}
+          resources:
+          {{- toYaml .Values.php.resources | nindent 12 }}
+
+        - name: chrome
+          image: {{ .Values.chrome.image }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: VNC_NO_PASSWORD
+              value: "1"
+          resources:
+          {{- toYaml .Values.chrome.resources | nindent 12 }}
+
+      volumes:
+        - name: nginx
+          configMap:
+            name: {{ .Chart.Name }}
+
+      hostAliases:
+        - ip: 127.0.0.1
+          hostnames: [php]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    # https://cloud.google.com/kubernetes-engine/docs/concepts/ingress#container-native_load_balancing
+    cloud.google.com/neg: '{"ingress": true}' # Creates a NEG after an Ingress is created
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      name: nginx
+      port: 80
+      targetPort: 80
+    - protocol: TCP
+      name: vnc
+      port: 7900
+      targetPort: 7900
+  selector:
+    app: {{ .Chart.Name }}
+
