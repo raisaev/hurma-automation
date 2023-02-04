@@ -44,7 +44,7 @@ jobs:
       matrix:
         include:
           - dockerfile: ./docker/php/Dockerfile
-            image: ${{ github.repository }}/php
+            image: ${{ github.repository }}
           - dockerfile: ./docker/nginx/Dockerfile
             image: ${{ github.repository }}/nginx
     permissions:
