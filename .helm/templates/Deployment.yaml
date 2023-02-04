@@ -17,8 +17,6 @@ spec:
     metadata:
       labels:
         app: {{ .Chart.Name }}
-      annotations:
-        checksum/config-map: {{ include (print .Template.BasePath "/ConfigMap.yaml" ) . | sha256sum | quote }}
     spec:
       serviceAccountName: {{ .Chart.Name }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -28,9 +26,6 @@ spec:
           imagePullPolicy: IfNotPresent
           resources:
           {{- toYaml .Values.nginx.resources  | nindent 12 }}
-          volumeMounts:
-            - mountPath: /etc/nginx
-              name: nginx
 
         - name: php
           image: {{ .Values.php.image }}
@@ -58,11 +53,6 @@ spec:
               value: "1"
           resources:
           {{- toYaml .Values.chrome.resources | nindent 12 }}
-
-      volumes:
-        - name: nginx
-          configMap:
-            name: {{ .Chart.Name }}
 
       hostAliases:
         - ip: 127.0.0.1
