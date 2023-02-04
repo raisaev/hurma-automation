@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Build and Publish Docker image
 
 on:
   push:
@@ -23,9 +23,30 @@ jobs:
       contents: read
       packages: write
       id-token: write
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
+
+      - name: Run CodeSniffer
+        run: php vendor/bin/phpcs ./
+
+      - name: Run Psalm
+        run: php vendor/bin/psalm --no-cache
 
       - name: Install cosign
         uses: sigstore/cosign-installer@f3c664df7af409cb4873aa5068053ba9d61a57b6 #v2.6.0
