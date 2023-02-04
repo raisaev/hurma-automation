@@ -43,9 +43,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - dockerfile: {context}/docker/php/Dockerfile
+          - dockerfile: ./docker/php/Dockerfile
             image: ${{ github.repository }}/php
-          - dockerfile: {context}/docker/nginx/Dockerfile
+          - dockerfile: ./docker/nginx/Dockerfile
             image: ${{ github.repository }}/nginx
     permissions:
       contents: read
@@ -53,6 +53,9 @@ jobs:
       id-token: write
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Install cosign
         uses: sigstore/cosign-installer@v2 #v2.6.0
         with:
