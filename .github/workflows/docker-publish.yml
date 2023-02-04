@@ -45,8 +45,8 @@ jobs:
         include:
           - dockerfile: ./docker/php/Dockerfile
             image: ${{ github.repository }}
-          - dockerfile: ./docker/nginx/Dockerfile
-            image: ${{ github.repository }}/nginx
+#          - dockerfile: ./docker/nginx/Dockerfile
+#            image: ${{ github.repository }}
     permissions:
       contents: read
       packages: write
