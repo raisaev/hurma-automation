@@ -21,6 +21,6 @@ class Application extends BaseApplication
             }
         }
 
-        parent::__construct($container->getParameter('project.name'));
+        parent::__construct((string)$container->getParameter('project.name'));
     }
 }

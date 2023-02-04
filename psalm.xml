@@ -12,5 +12,8 @@
         <directory name="bin" />
         <directory name="web" />
         <directory name="templates" />
+        <ignoreFiles>
+            <directory name="vendor"/>
+        </ignoreFiles>
     </projectFiles>
 </psalm>

@@ -1,4 +1,5 @@
 .ONESHELL: # Applies to every targets in the file!
+.PHONY:
 
 DOCKER_COMPOSE = docker-compose -f ./docker/docker-compose.yaml --env-file ./docker/.env
 
@@ -9,6 +10,7 @@ down:
 	${DOCKER_COMPOSE} down -v --rmi=all --remove-orphans
 
 build:
+	make validate-cs validate-psalm
 	${DOCKER_COMPOSE} build
 
 ##################
@@ -21,8 +23,12 @@ validate-psalm:
 
 ##################
 
-.SILENT: add-user
-add-user:
+.SILENT:user-show
+user-show:
+	${DOCKER_COMPOSE} exec nginx sh -c "cat /etc/nginx/.htpasswd"
+
+.SILENT:user-add
+user-add:
 	if [ "${userName}" = "" ]; then \
 	    echo "\033[0;31m"userName ARG must be provided; \
  		exit 1;

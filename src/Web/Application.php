@@ -46,6 +46,7 @@ class Application
 
         $dispatcher = new EventDispatcher();
         $dispatcher->addSubscriber(new RouterListener($matcher, new RequestStack()));
+        /** @psalm-suppress InternalMethod */
         $dispatcher->addSubscriber(new SessionListener($this->containerBuilder));
         $dispatcher->addListener(
             KernelEvents::EXCEPTION,

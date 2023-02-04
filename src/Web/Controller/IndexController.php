@@ -71,7 +71,7 @@ class IndexController
         try {
             $result = $this->coinProcessor->process(
                 (string)$session->get('spreadsheetId'),
-                $request->request->get('sheetName'),
+                $request->request->has('sheetName') ? (string)$request->request->get('sheetName') : null,
                 (string)$request->request->get('range'),
                 $request->request->getBoolean('dryRun')
             );
