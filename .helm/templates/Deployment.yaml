@@ -23,20 +23,20 @@ spec:
       containers:
         - name: nginx
           image: {{ .Values.nginx.image }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           resources:
           {{- toYaml .Values.nginx.resources  | nindent 12 }}
 
         - name: php
           image: {{ .Values.php.image }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: BASE_URL
-              value: {{ .Values.ingress.domain }}
+              value: https://{{ .Values.ingress.domain }}
             - name: CHROME_WEB_DRIVER_URL
-              value: "http://localost:4444/wd/hub/"
+              value: http://{{ .Chart.Name }}:4444/wd/hub/
             - name: CHROME_VNC_URL
-              value: "{{ .Values.ingress.domain }}/vnc"
+              value: https://vnc.{{ .Values.ingress.domain }}
 
             - name: HURMA_LOGIN
               value: {{ .Values.hurma.login }}
@@ -53,10 +53,18 @@ spec:
               value: "1"
           resources:
           {{- toYaml .Values.chrome.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /dev/shm
+              name: dshm
+
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
 
       hostAliases:
         - ip: 127.0.0.1
-          hostnames: [php]
+          hostnames: [php, chrome]
 ---
 apiVersion: v1
 kind: Service

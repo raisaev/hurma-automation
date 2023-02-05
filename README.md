@@ -1,37 +1,32 @@
-# isaev :hurma: hurma-automation
+# hurma-automation
 
-## 0. installation
+---
 
-#### 0.1. установка docker
+> google service account JSON key must be saved to ./docker/google_auth.json
+
+> google service account must have write access to google sheet
+
+> google service account must have workload identity configured
+> https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#gcloud_4
 
 ```shell
-sudo apt install docker.io
-sudo gpasswd -a $USER docker
+SERVICE_ACCOUNT_NAME=
+GOOGLE_PROJECT=
+
+gcloud iam service-accounts add-iam-policy-binding ${SERVICE_ACCOUNT_NAME} \
+    --role roles/iam.workloadIdentityUser \
+    --member "serviceAccount:${GOOGLE_PROJECT}.svc.id.goog[hurma/hurma-automation]"
 ```
 
-#### 0.2. установка docker-compose
+---
 
+make command can be used for docker-compose up|down and so on operations
 ```shell
-sudo wget –O /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64
-sudo chmod +x /usr/local/bin/docker-compose
-
-docker-compose --version
+make up
+make down
 ```
 
-## 1. run
-
 ```shell
-# hurma-automation@attendance-2-1602488346038.iam.gserviceaccount.com must have write access
-export GOOGLE_APPLICATION_CREDENTIALS=""
-
-cd dev && docker-compose up -d --build
-docker-compose exec php /bin/bash
-```
-
-## 2. test
-
-```shell
-# https://docs.google.com/spreadsheets/d/14PJJQ3il5yvmk-Gx7nDDr5T1ksELrbxdq-eW3j-aitw
 sheet="14PJJQ3il5yvmk-Gx7nDDr5T1ksELrbxdq-eW3j-aitw"
 
 php bin/console google:parse-sheet ${sheet} A1:D200 one

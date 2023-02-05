@@ -20,6 +20,7 @@ services:
         - INSTALL_XDEBUG=${INSTALL_XDEBUG}
     volumes:
       - ./../:/var/www
+      - ./google_auth.json:/home/www-data/.config/gcloud/application_default_credentials.json
     working_dir: "/var/www"
     extra_hosts:
       - "host.docker.internal:172.100.0.1"

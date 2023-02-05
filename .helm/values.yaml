@@ -11,6 +11,7 @@ hurma:
   password: ""
 
 google:
+  serviceAccount: ""
   projectId: ""
 
 nginx:
@@ -38,7 +39,7 @@ chrome:
   resources:
     limits:
       cpu: "0.1"
-      memory: "100Mi"
+      memory: "2000Mi"
     requests:
       cpu: "0.05"
       memory: "50Mi"
