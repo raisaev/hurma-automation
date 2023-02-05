@@ -6,6 +6,7 @@ namespace App\Web\Controller;
 
 use App\Hurma\CoinProcessor;
 use App\Kernel;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,6 +25,7 @@ class IndexController
         private readonly string $defaultSpreadsheetId,
         private readonly string $defaultSheetName,
         private readonly string $defaultRange,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -86,6 +88,7 @@ class IndexController
                 )
             );
         } catch (\Throwable $e) {
+            $this->logger->error($e);
             $session->getFlashBag()->add('danger', $e->getMessage());
         }
 

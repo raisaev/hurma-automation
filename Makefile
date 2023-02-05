@@ -18,6 +18,7 @@ build:
 	make validate-cs validate-psalm &&
 	${DOCKER_COMPOSE} build
 
+.SILENT:release
 release:
 	helm upgrade -i "hurma-automation" .helm \
 		-f .helm/values.local.yaml \
