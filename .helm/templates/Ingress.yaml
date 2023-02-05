@@ -11,6 +11,8 @@ metadata:
     cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer | quote }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    nginx.org/proxy-read-timeout: "3600s"
+    nginx.org/proxy-send-timeout: "3600s"
 spec:
   tls:
     - hosts:
