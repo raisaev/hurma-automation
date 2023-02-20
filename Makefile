@@ -27,6 +27,9 @@ release:
 		--atomic \
 		--history-max=3
 
+release-status:
+	helm status "hurma-automation" --namespace=hurma
+
 ##################
 
 validate-cs:
