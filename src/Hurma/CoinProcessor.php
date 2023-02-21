@@ -155,7 +155,7 @@ class CoinProcessor
 
         if ($record->coinCount < 0) {
             $this->client->getDriver()
-                ->findElements(WebDriverBy::xpath('//div[@id="editModalRequest"]//input[@id="sub_days-action"]'))[0]
+                ->findElements(WebDriverBy::xpath('//div[@id="editModalRequest"]//label[@for="sub_days-action"]'))[0]
                 ->click();
         }
 

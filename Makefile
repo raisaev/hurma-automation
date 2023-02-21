@@ -11,6 +11,9 @@ up:
 down:
 	${DOCKER_COMPOSE} down
 
+logs:
+	${DOCKER_COMPOSE} logs -f
+
 destroy:
 	${DOCKER_COMPOSE} down -v --rmi=all --remove-orphans
 
