@@ -36,7 +36,7 @@ release-status:
 ##################
 
 validate-cs:
-	${DOCKER_COMPOSE} exec -u www-data php vendor/bin/phpcs ./
+	${DOCKER_COMPOSE} exec -u www-data php vendor/bin/phpcs ./src
 
 validate-psalm:
 	${DOCKER_COMPOSE} exec -u www-data php vendor/bin/psalm --no-cache

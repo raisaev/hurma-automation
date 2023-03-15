@@ -153,11 +153,10 @@ class CoinProcessor
 
         usleep(500_000);
 
-        if ($record->coinCount < 0) {
-            $this->client->getDriver()
-                ->findElements(WebDriverBy::xpath('//div[@id="editModalRequest"]//label[@for="sub_days-action"]'))[0]
-                ->click();
-        }
+        $label = $record->coinCount < 0 ? 'sub_days-action' : 'add_days-action';
+        $this->client->getDriver()
+            ->findElements(WebDriverBy::xpath('//div[@id="editModalRequest"]//label[@for="' . $label . '"]'))[0]
+            ->click();
 
         $this->client->getDriver()
             ->findElements(WebDriverBy::xpath('//div[@id="editModalRequest"]//input[@name="days"]'))[0]
