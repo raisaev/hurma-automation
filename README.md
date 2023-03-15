@@ -1,5 +1,7 @@
 # hurma-automation
 
+[![build-status](https://github.com/raisaev/hurma-automation/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/raisaev/hurma-automation/actions/workflows/docker-publish.yml)
+
 ---
 
 > google service account JSON key must be saved to ./docker/google_auth.json
