@@ -17,8 +17,6 @@ class CoinProcessor
     ) {
     }
 
-    // ----------------------------------------
-
     public function process(
         string $sheetId,
         ?string $sheetName,
@@ -124,8 +122,7 @@ class CoinProcessor
 
     private function search(SheetRecord $record): bool
     {
-        $search = $this->client->getDriver()
-            ->findElements(WebDriverBy::xpath('//div[@class="cus-select-avatar__search"]//input[@type="search"]'))[0];
+        $search = $this->client->getDriver()->findElements(WebDriverBy::xpath('//input[@type="search"]'))[0];
 
         $search->sendKeys(WebDriverKeys::ESCAPE);
         usleep(1_000_000);
