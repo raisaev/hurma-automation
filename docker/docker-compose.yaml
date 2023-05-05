@@ -22,8 +22,8 @@ services:
       - ./../:/var/www
       - ./google_auth.json:/home/www-data/.config/gcloud/application_default_credentials.json
     working_dir: "/var/www"
-    extra_hosts:
-      - "host.docker.internal:172.100.0.1"
+#    extra_hosts:
+#      - "host.docker.internal:172.100.0.1"
     environment:
       PHP_IDE_CONFIG: serverName=hurma-automation
       CHROME_WEB_DRIVER_URL: http://chrome:4444/wd/hub/

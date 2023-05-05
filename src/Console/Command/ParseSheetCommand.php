@@ -26,8 +26,6 @@ class ParseSheetCommand extends Command
         parent::__construct($name);
     }
 
-    // ----------------------------------------
-
     protected function configure(): void
     {
         $this

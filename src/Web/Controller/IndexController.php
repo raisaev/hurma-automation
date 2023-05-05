@@ -29,8 +29,6 @@ class IndexController
     ) {
     }
 
-    // ----------------------------------------
-
     #[Route('/', name: 'index')]
     public function index(Request $request): Response
     {

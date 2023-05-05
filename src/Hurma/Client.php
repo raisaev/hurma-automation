@@ -33,8 +33,6 @@ class Client
         }
     }
 
-    // ----------------------------------------
-
     public function getDriver(): RemoteWebDriver
     {
         if (!isset($this->driver)) {
@@ -51,8 +49,6 @@ class Client
     {
         return $this->url;
     }
-
-    // ----------------------------------------
 
     public function ensureLogin(): void
     {

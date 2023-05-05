@@ -33,8 +33,6 @@ class Application
     ) {
     }
 
-    // ----------------------------------------
-
     public function run(Request $request): void
     {
         $loader = new AnnotationDirectoryLoader(

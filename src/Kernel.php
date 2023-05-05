@@ -11,8 +11,6 @@ class Kernel
     ) {
     }
 
-    // ----------------------------------------
-
     public function getRootDir(): string
     {
         return $this->rootDir;

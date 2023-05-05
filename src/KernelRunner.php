@@ -36,8 +36,6 @@ class KernelRunner
         return $containerBuilder;
     }
 
-    // ----------------------------------------
-
     public static function console(): int
     {
         $container = self::boot();
