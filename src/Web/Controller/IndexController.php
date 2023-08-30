@@ -22,9 +22,9 @@ class IndexController
     public function __construct(
         private readonly Kernel $kernel,
         private readonly CoinProcessor $coinProcessor,
-        private readonly string $defaultSpreadsheetId,
-        private readonly string $defaultSheetName,
-        private readonly string $defaultRange,
+        private readonly string $sheetId,
+        private readonly string $sheetName,
+        private readonly string $range,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -44,13 +44,13 @@ class IndexController
         $content = $templating->render(
             'index.php',
             [
-                'title'         => 'Hurma: automated Kate',
-                'kernel'        => $this->kernel,
-                'spreadsheetId' => $session->get('spreadsheetId') ?? $this->defaultSpreadsheetId,
-                'sheetName'     => $session->get('sheetName') ?? $this->defaultSheetName,
-                'range'         => $session->get('range') ?? $this->defaultRange,
-                'messages'      => $session->getFlashBag()->all(),
-                'result'        => $request->getSession()->get('result', []),
+                'title'     => 'Hurma: automated Kate',
+                'kernel'    => $this->kernel,
+                'sheetId'   => $session->get('sheetId') ?? $this->sheetId,
+                'sheetName' => $session->get('sheetName') ?? $this->sheetName,
+                'range'     => $session->get('range') ?? $this->range,
+                'messages'  => $session->getFlashBag()->all(),
+                'result'    => $request->getSession()->get('result', []),
             ]
         );
         $session->remove('result');
@@ -64,15 +64,15 @@ class IndexController
         /** @var FlashBagAwareSessionInterface $session */
         $session = $request->getSession();
 
-        $session->set('spreadsheetId', $request->request->get('spreadsheetId'));
+        $session->set('sheetId', $request->request->get('sheetId'));
         $session->set('sheetName', $request->request->get('sheetName'));
         $session->set('range', $request->request->get('range'));
 
         try {
             $result = $this->coinProcessor->process(
-                (string)$session->get('spreadsheetId'),
+                (string) $session->get('sheetId'),
                 $request->request->has('sheetName') ? (string)$request->request->get('sheetName') : null,
-                (string)$request->request->get('range'),
+                (string) $request->request->get('range'),
                 $request->request->getBoolean('dryRun')
             );
 

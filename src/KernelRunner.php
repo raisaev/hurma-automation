@@ -29,7 +29,7 @@ class KernelRunner
 
         try {
             $loader->load('services.local.php');
-        } catch (FileLocatorFileNotFoundException $exception) {
+        } catch (FileLocatorFileNotFoundException) {
             //ignored
         }
 

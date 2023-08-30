@@ -25,7 +25,6 @@ RUN apk --no-cache add shadow && \
 RUN chown www-data:www-data /var/www
 COPY --chown=www-data:www-data ./ /var/www
 WORKDIR /var/www
-
 USER www-data
 
 # Composer

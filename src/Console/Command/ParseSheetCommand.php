@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name       : 'google:parse-sheet',
-    description: 'google: parse sheet'
+    description: 'parse sheet'
 )]
 class ParseSheetCommand extends Command
 {
@@ -31,7 +31,7 @@ class ParseSheetCommand extends Command
         $this
             ->setDefinition(
                 new InputDefinition([
-                    new InputArgument('spreadsheetId', InputArgument::REQUIRED),
+                    new InputArgument('sheetId', InputArgument::REQUIRED),
                     new InputArgument('range', InputArgument::REQUIRED),
                     new InputArgument('sheetName', InputArgument::OPTIONAL),
                 ])
@@ -41,7 +41,7 @@ class ParseSheetCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $range = $this->sheets->getRange(
-            $input->getArgument('spreadsheetId'),
+            $input->getArgument('sheetId'),
             $input->hasArgument('sheetName') ? $input->getArgument('sheetName') : null,
             $input->getArgument('range'),
         );

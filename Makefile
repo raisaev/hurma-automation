@@ -1,12 +1,17 @@
 args = $(foreach a,$($(subst -,_,$1)_args),$(if $(value $a),$a="$($a)"))
 
 .ONESHELL: # Applies to every targets in the file!
-.PHONY:
+include ./docker/.env
 
 DOCKER_COMPOSE = docker-compose -f ./docker/docker-compose.yaml --env-file ./docker/.env
 
+build:
+	${DOCKER_COMPOSE} build
+
+.SILENT:up
 up:
-	${DOCKER_COMPOSE} up -d --remove-orphans --build
+	${DOCKER_COMPOSE} up -d --remove-orphans
+	echo started on http://localhost:${PUBLIC_PORT}
 
 down:
 	${DOCKER_COMPOSE} down

@@ -38,7 +38,6 @@ services:
     ports:
       - ${PUBLIC_PORT}:80
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/.htpasswd:/etc/nginx/.htpasswd
       - ./../web/assets:/var/www/web/assets
 

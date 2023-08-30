@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name       : 'hurma:process-coins',
-    description: 'hurma: automatically process coins from google sheet'
+    description: 'automatically process coins from google sheet'
 )]
 class ProcessCoinsCommand extends Command
 {
@@ -32,7 +32,7 @@ class ProcessCoinsCommand extends Command
         $this
             ->setDefinition(
                 new InputDefinition([
-                    new InputArgument('spreadsheetId', InputArgument::REQUIRED),
+                    new InputArgument('sheetId', InputArgument::REQUIRED),
                     new InputArgument('range', InputArgument::REQUIRED),
                     new InputArgument('sheetName', InputArgument::OPTIONAL),
                     new InputOption('dry-run', mode: InputOption::VALUE_OPTIONAL),
@@ -43,7 +43,7 @@ class ProcessCoinsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $result = $this->coinProcessor->process(
-            $input->getArgument('spreadsheetId'),
+            $input->getArgument('sheetId'),
             $input->hasArgument('sheetName') ? $input->getArgument('sheetName') : null,
             $input->getArgument('range'),
             $input->hasOption('dry-run')
