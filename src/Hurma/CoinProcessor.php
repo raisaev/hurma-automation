@@ -145,28 +145,28 @@ class CoinProcessor
     private function submitCoin(SheetRecord $record): void
     {
         $this->client->getDriver()
-             ->findElements(WebDriverBy::xpath('//button[@data-target="#editModalRequest"]'))[0]
+             ->findElements(WebDriverBy::xpath('//button[contains(@class, "edit-btn")]'))[0]
              ->click();
 
         usleep(500_000);
 
-        $label = $record->coinCount < 0 ? 'sub_days-action' : 'add_days-action';
+        $label = $record->coinCount < 0 ? 'Відняти дні' : 'Додати дні';
         $this->client->getDriver()
-            ->findElements(WebDriverBy::xpath('//div[@id="editModalRequest"]//label[@for="' . $label . '"]'))[0]
+            ->findElements(WebDriverBy::xpath('//div[contains(@class, "modal-container")]//label[text()="' . $label . '"]'))[0]
             ->click();
 
         $this->client->getDriver()
-            ->findElements(WebDriverBy::xpath('//div[@id="editModalRequest"]//input[@name="days"]'))[0]
+            ->findElements(WebDriverBy::xpath('//div[contains(@class, "modal-container")]//input'))[3]
             ->clear()
             ->sendKeys(abs($record->coinCount));
 
         $this->client->getDriver()
-            ->findElements(WebDriverBy::xpath('//div[@id="editModalRequest"]//textarea[@name="comment"]'))[0]
+            ->findElements(WebDriverBy::xpath('//div[contains(@class, "modal-container")]//textarea'))[0]
             ->clear()
             ->sendKeys("$record->from: $record->coinComment");
 
         $this->client->getDriver()
-            ->findElements(WebDriverBy::xpath('//div[@id="editModalRequest"]//button[contains(@class, "btn")]'))[0]
+            ->findElements(WebDriverBy::xpath('//div[contains(@class, "modal-container")]//button[contains(@class, "v-btn")]'))[0]
             ->click();
 
         usleep(500_000);
