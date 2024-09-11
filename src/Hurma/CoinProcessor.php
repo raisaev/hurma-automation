@@ -8,21 +8,17 @@ use App\Google\Sheets;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverKeys;
 
-class CoinProcessor
+readonly class CoinProcessor
 {
     public function __construct(
-        private readonly Client $client,
-        private readonly Sheets $sheets,
-        private readonly SheetRecordFactory $recordFactory,
+        private Client $client,
+        private Sheets $sheets,
+        private SheetRecordFactory $recordFactory,
     ) {
     }
 
-    public function process(
-        string $sheetId,
-        ?string $sheetName,
-        string $sheetRange,
-        bool $dryRun = false
-    ): array {
+    public function process(string $sheetId, ?string $sheetName, string $sheetRange, bool $dryRun = false): array
+    {
         $range = $this->sheets->getRange($sheetId, $sheetName, $sheetRange);
         if (count($range) <= 1) {
             return [];
@@ -33,23 +29,11 @@ class CoinProcessor
         $statusIndex = array_search($this->recordFactory->status, $range[0], true);
         $this->openManagementPage();
 
-        //todo [r.isaev] move it from here
         $processed = [];
-        $ignored = [
-            '#m2echarity🙌',
-            'на авто для ЗСУ🛻',
-            'Product Team',
-            'Sharks',
-            'Space Whales',
-            'Support Team',
-            'M2E Pro Team',
-            'HR Team',
-            'Content Team',
-        ];
         foreach (array_slice($range, 1) as $index => $row) {
             $record = $this->recordFactory->create($range, ++$index);
 
-            if ($record->coinCount === 0 || $record->isStatusDone() || in_array($record->name, $ignored, true)) {
+            if ($record->coinCount === 0 || $record->isStatusDone()) {
                 $processed[] = $record->name . '|' . $record::STATUS_SKIPPED;
                 continue;
             }
@@ -97,7 +81,7 @@ class CoinProcessor
         $driver = $this->client->getDriver();
 
         $this->client->ensureLogin();
-        $driver->get($this->client->url() . 'company-absence-request');
+        $driver->get("{$this->client->url}company-absence-request");
 
         usleep(1_000_000);
 

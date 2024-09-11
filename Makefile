@@ -5,13 +5,13 @@ include ./docker/.env
 
 DOCKER_COMPOSE = docker-compose -f ./docker/docker-compose.yaml --env-file ./docker/.env
 
-build:
-	${DOCKER_COMPOSE} build
+#---------------------------------------------------
 
 .SILENT:up
 up:
 	${DOCKER_COMPOSE} up -d --remove-orphans
 	echo started on http://localhost:${PUBLIC_PORT}
+	make logs
 
 down:
 	${DOCKER_COMPOSE} down
@@ -23,8 +23,9 @@ destroy:
 	${DOCKER_COMPOSE} down -v --rmi=all --remove-orphans
 
 build:
-	make validate-cs validate-psalm &&
-	${DOCKER_COMPOSE} build
+	${DOCKER_COMPOSE} build $(c)
+
+#---------------------------------------------------
 
 .SILENT:release
 release:
@@ -38,15 +39,15 @@ release:
 release-status:
 	helm status "hurma-automation" --namespace=hurma
 
-##################
+#---------------------------------------------------
 
 validate-cs:
-	${DOCKER_COMPOSE} exec -u www-data php vendor/bin/phpcs ./src
+	${DOCKER_COMPOSE} run -u www-data php vendor/bin/phpcs ./src
 
 validate-psalm:
-	${DOCKER_COMPOSE} exec -u www-data php vendor/bin/psalm --no-cache
+	${DOCKER_COMPOSE} run -u www-data php vendor/bin/psalm --no-cache
 
-##################
+#---------------------------------------------------
 
 .SILENT:user-show
 user-show:

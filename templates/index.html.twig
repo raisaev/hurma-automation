@@ -1,21 +1,9 @@
-<?php
-
-declare(strict_types=1);
-
-use App\Kernel;
-use Symfony\Component\Templating\PhpEngine;
-
-/** @var PhpEngine $view */
-/** @var Kernel $kernel */
-
-?>
-
 <html lang="en">
 <head>
-    <title><?= $title ?? '' ?></title>
-    <link rel="icon" href="<?= $kernel->getBaseUrl('assets/hurma.png') ?>" type="image/jpg">
+    <title>{{ pageTitle }}</title>
+    <link rel="icon" href="{{ asset('assets/hurma.png') }}" type="image/jpg">
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -54,28 +42,28 @@ use Symfony\Component\Templating\PhpEngine;
 <body>
 
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#"><?= $title ?? '' ?></a>
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">{{ pageTitle }}</a>
 </header>
 
-<?php foreach ($messages ?? [] as $type => $byType) : ?>
-    <?php foreach ($byType as $message) : ?>
-        <div class="alert alert-<?= $type ?>" role="alert"><?= $message ?></div>
-    <?php endforeach; ?>
-<?php endforeach; ?>
+{% for label, messages in app.flashes(['success', 'warning', 'error']) %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">{{ message }}</div>
+    {% endfor %}
+{% endfor %}
 
 <main role="main" class="container">
 
     <h1 class="mt-5 mb-5">
-        <img src="<?= $kernel->getBaseUrl('assets/hurma.png') ?>" style="width: 30px;">
+        <img src="{{ asset('assets/hurma.png') }}" style="width: 30px;">
         hurma is ready for mission
-        <a href="<?= $kernel->getVncUrl() ?>" target="_blank" class="badge badge-dark .float-right" data-toggle="tooltip" data-placement="bottom" style="font-size: 10px;">progress</a>
+        <a href="{{ vncUrl }}" target="_blank" class="badge badge-dark .float-right" data-toggle="tooltip" data-placement="bottom" style="font-size: 10px;">progress</a>
     </h1>
 
-    <form method="post" id="form" action="<?= $kernel->getBaseUrl('submit') ?>">
+    <form method="post" id="form" action="{{ url('submit') }}">
         <label for="sheetId" class="form-label">Sheet ID</label>
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon3">https://docs.google.com/spreadsheets/d/</span>
-            <input type="text" class="form-control" id="sheetId" name="sheetId" placeholder="{sheet-id}" value="<?= $sheetId ?? '' ?>" aria-describedby="basic-addon3" required>
+            <input type="text" class="form-control" id="sheetId" name="sheetId" placeholder="{sheet-id}" value="{{ form.sheetId }}" aria-describedby="basic-addon3" required>
             <span class="input-group-text">
                 <a target="_blank" href="#" onclick="let url = $('#sheetId').val(); if (url === '') return false; window.open('https://docs.google.com/spreadsheets/d/' + url)" class="text-secondary">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
@@ -87,9 +75,9 @@ use Symfony\Component\Templating\PhpEngine;
         </div>
         <label class="form-label">Name / Range</label>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="{sheet-name}" name="sheetName" value="<?= $sheetName ?? '' ?>" aria-label="Name">
+            <input type="text" class="form-control" placeholder="{sheet-name}" name="sheetName" value="{{ form.sheetName }}" aria-label="Name">
             <span class="input-group-text">!</span>
-            <input type="text" class="form-control" placeholder="A1:D200" name="range" aria-label="Range" value="<?= $range ?? '' ?>" required>
+            <input type="text" class="form-control" placeholder="A1:D200" name="range" aria-label="Range" value="{{ form.range }}" required>
         </div>
         <div class="form-check d-none">
             <input class="form-check-input" type="checkbox" value="1" id="dryRun" name="dryRun">
@@ -99,7 +87,7 @@ use Symfony\Component\Templating\PhpEngine;
         <button type="submit" class="btn btn-secondary ml-3" onclick="$('#dryRun').prop('checked', false);">process</button>
     </form>
 
-    <?php if (!empty($result)) : ?>
+    {% if app.session.get('result') %}
     <h2 class="mt-5 text-primary">results</h2>
     <div>
         <table class="table table-striped">
@@ -110,16 +98,16 @@ use Symfony\Component\Templating\PhpEngine;
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($result as $row) : ?>
+            {% for row in app.session.get('result') %}
                 <tr>
-                    <td><?= explode('|', $row)[0] ?? '--' ?></td>
-                    <td><?= explode('|', $row)[1] ?? '--' ?></td>
+                    <td>{{ row | split('|')[0] }}</td>
+                    <td>{{ row | split('|')[1] }}</td>
                 </tr>
-            <?php endforeach; ?>
+            {% endfor %}
             </tbody>
         </table>
     </div>
-    <?php endif; ?>
+    {% endif %}
 </main>
 
 <footer class="footer">

@@ -18,7 +18,7 @@ class SheetRecord
      * @param self::STATUS_* $status
      */
     public function __construct(
-        public readonly int $index,
+        public int $index,
         public string $from,
         public string $name,
         public string $source,

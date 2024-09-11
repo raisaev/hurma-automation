@@ -1,0 +1,14 @@
+parameters:
+    app.vnc.url: '%env(CHROME_VNC_URL)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'

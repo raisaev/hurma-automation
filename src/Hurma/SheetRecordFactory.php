@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace App\Hurma;
 
-class SheetRecordFactory
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+
+readonly class SheetRecordFactory
 {
     public function __construct(
-        public readonly string $from,
-        public readonly string $name,
-        public readonly string $source,
-        public readonly string $coins,
-        public readonly string $comment,
-        public readonly string $status,
+        #[Autowire(env: 'FIELD_FROM')] public string $from,
+        #[Autowire(env: 'FIELD_NAME')] public string $name,
+        #[Autowire(env: 'FIELD_SOURCE')] public string $source,
+        #[Autowire(env: 'FIELD_COINS')] public string $coins,
+        #[Autowire(env: 'FIELD_COMMENT')] public string $comment,
+        #[Autowire(env: 'FIELD_STATUS')] public string $status,
     ) {
     }
 
@@ -41,7 +43,7 @@ class SheetRecordFactory
             from       : $row[$this->from] ?? null,
             name       : $row[$this->name] ?? null,
             source     : $row[$this->source] ?? null,
-            coinCount  : (int)($row[$this->coins] ?? 0),
+            coinCount  : (int) ($row[$this->coins] ?? 0),
             coinComment: $row[$this->comment] ?? null,
             status     : $row[$this->status] ?? null,
         );

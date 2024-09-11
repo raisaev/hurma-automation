@@ -38,7 +38,7 @@ spec:
           image: {{ .Values.php.image }}
           imagePullPolicy: Always
           env:
-            - name: BASE_URL
+            - name: APP_URL
               value: https://{{ .Values.ingress.domain }}
             - name: CHROME_WEB_DRIVER_URL
               value: http://{{ .Chart.Name }}:4444/wd/hub/

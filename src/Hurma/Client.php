@@ -11,6 +11,7 @@ use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\WebDriverPlatform;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class Client
 {
@@ -19,10 +20,10 @@ class Client
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly Kernel $kernel,
-        private readonly string $webDriverUrl,
-        private readonly string $url,
-        private readonly string $login,
-        private readonly string $password,
+        #[Autowire(env: 'CHROME_WEB_DRIVER_URL')] private readonly string $webDriverUrl,
+        #[Autowire(env: 'HURMA_URL')] public readonly string $url,
+        #[Autowire(env: 'HURMA_LOGIN')] private readonly string $login,
+        #[Autowire(env: 'HURMA_PASSWORD')] private readonly string $password,
     ) {
     }
 
@@ -45,16 +46,11 @@ class Client
         return $this->driver;
     }
 
-    public function url(): string
-    {
-        return $this->url;
-    }
-
     public function ensureLogin(): void
     {
         $this->getDriver()->get($this->url);
 
-        $cookiesFile = $this->kernel->getTmpDir() . 'cookies.json';
+        $cookiesFile = $this->kernel->getTmpPath() . 'cookies.json';
         if (file_exists($cookiesFile)) {
             $cookies = json_decode(file_get_contents($cookiesFile), true, 512, JSON_THROW_ON_ERROR);
             foreach ($cookies as $cookie) {

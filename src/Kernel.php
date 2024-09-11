@@ -1,38 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App;
 
-class Kernel
+use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\HttpKernel\Kernel as BaseKernel;
+
+class Kernel extends BaseKernel
 {
-    public function __construct(
-        private readonly string $rootDir,
-    ) {
-    }
+    use MicroKernelTrait;
 
-    public function getRootDir(): string
+    public static function getTmpPath(): string
     {
-        return $this->rootDir;
-    }
-
-    public function getBaseUrl(?string $url = null): string
-    {
-        return trim(getenv('BASE_URL'), '/') . '/' . $url;
-    }
-
-    public function getVncUrl(): string
-    {
-        return trim(getenv('CHROME_VNC_URL'), '/');
-    }
-
-    public function getTmpDir(): string
-    {
-        return $this->rootDir . 'tmp/';
-    }
-
-    public function getTemplatesDir(): string
-    {
-        return $this->rootDir . 'templates/';
+        return sys_get_temp_dir() . '/';
     }
 }

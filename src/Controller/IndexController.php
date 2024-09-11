@@ -2,30 +2,27 @@
 
 declare(strict_types=1);
 
-namespace App\Web\Controller;
+namespace App\Controller;
 
 use App\Hurma\CoinProcessor;
-use App\Kernel;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Templating\Loader\FilesystemLoader;
-use Symfony\Component\Templating\PhpEngine;
-use Symfony\Component\Templating\Helper\SlotsHelper;
-use Symfony\Component\Templating\TemplateNameParser;
 use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
+use Symfony\Component\Routing\Attribute\Route;
 
-class IndexController
+class IndexController extends AbstractController
 {
     public function __construct(
-        private readonly Kernel $kernel,
+        private readonly ParameterBagInterface $parameterBag,
         private readonly CoinProcessor $coinProcessor,
-        private readonly string $sheetId,
-        private readonly string $sheetName,
-        private readonly string $range,
         private readonly LoggerInterface $logger,
+        #[Autowire(env: 'GOOGLE_SHEET_ID')] private readonly string $sheetId,
+        #[Autowire(env: 'GOOGLE_SHEET_NAME')] private readonly string $sheetName,
+        #[Autowire(env: 'GOOGLE_SHEET_RANGE')] private readonly string $range,
     ) {
     }
 
@@ -35,27 +32,21 @@ class IndexController
         /** @var FlashBagAwareSessionInterface $session */
         $session = $request->getSession();
 
-        $templating = new PhpEngine(
-            new TemplateNameParser(),
-            new FilesystemLoader("{$this->kernel->getTemplatesDir()}/%name%")
-        );
-        $templating->set(new SlotsHelper());
-
-        $content = $templating->render(
-            'index.php',
+        $content = $this->render(
+            'index.html.twig',
             [
-                'title'     => 'Hurma: automated Kate',
-                'kernel'    => $this->kernel,
-                'sheetId'   => $session->get('sheetId') ?? $this->sheetId,
-                'sheetName' => $session->get('sheetName') ?? $this->sheetName,
-                'range'     => $session->get('range') ?? $this->range,
-                'messages'  => $session->getFlashBag()->all(),
-                'result'    => $request->getSession()->get('result', []),
+                'pageTitle' => 'Hurma: automated Kate',
+                'vncUrl'    => $this->parameterBag->get('app.vnc.url'),
+                'form'      => [
+                    'sheetId'   => $session->get('sheetId', $this->sheetId),
+                    'sheetName' => $session->get('sheetName', $this->sheetName),
+                    'range'     => $session->get('range', $this->range),
+                ],
             ]
         );
         $session->remove('result');
 
-        return (new Response())->setContent($content);
+        return $content;
     }
 
     #[Route('/submit', name: 'submit', methods: ['POST'])]
@@ -71,8 +62,8 @@ class IndexController
         try {
             $result = $this->coinProcessor->process(
                 (string) $session->get('sheetId'),
-                $request->request->has('sheetName') ? (string)$request->request->get('sheetName') : null,
-                (string) $request->request->get('range'),
+                $request->request->has('sheetName') ? $request->request->getString('sheetName') : null,
+                $request->request->getString('range'),
                 $request->request->getBoolean('dryRun')
             );
 
@@ -90,6 +81,6 @@ class IndexController
             $session->getFlashBag()->add('danger', $e->getMessage());
         }
 
-        return new RedirectResponse($this->kernel->getBaseUrl());
+        return $this->redirectToRoute('index');
     }
 }

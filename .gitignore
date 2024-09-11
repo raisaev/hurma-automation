@@ -1,12 +1,15 @@
-/.idea
+/auth.json
+
+###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
 /.env.*.local
-
-/config/*.local.php
-/docker/*.json
-
-/tmp/
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
 /vendor/
+###< symfony/framework-bundle ###
 
-/.helm/values.local.yaml
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+###< squizlabs/php_codesniffer ###
