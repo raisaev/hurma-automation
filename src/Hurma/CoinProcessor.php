@@ -8,12 +8,12 @@ use App\Google\Sheets;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverKeys;
 
-readonly class CoinProcessor
+class CoinProcessor
 {
     public function __construct(
-        private Client $client,
-        private Sheets $sheets,
-        private SheetRecordFactory $recordFactory,
+        private readonly Client $client,
+        private readonly Sheets $sheets,
+        private readonly SheetRecordFactory $recordFactory,
     ) {
     }
 

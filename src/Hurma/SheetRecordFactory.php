@@ -6,15 +6,15 @@ namespace App\Hurma;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-readonly class SheetRecordFactory
+class SheetRecordFactory
 {
     public function __construct(
-        #[Autowire(env: 'FIELD_FROM')] public string $from,
-        #[Autowire(env: 'FIELD_NAME')] public string $name,
-        #[Autowire(env: 'FIELD_SOURCE')] public string $source,
-        #[Autowire(env: 'FIELD_COINS')] public string $coins,
-        #[Autowire(env: 'FIELD_COMMENT')] public string $comment,
-        #[Autowire(env: 'FIELD_STATUS')] public string $status,
+        #[Autowire(env: 'FIELD_FROM')] public readonly string $from,
+        #[Autowire(env: 'FIELD_NAME')] public readonly string $name,
+        #[Autowire(env: 'FIELD_SOURCE')] public readonly string $source,
+        #[Autowire(env: 'FIELD_COINS')] public readonly string $coins,
+        #[Autowire(env: 'FIELD_COMMENT')] public readonly string $comment,
+        #[Autowire(env: 'FIELD_STATUS')] public readonly string $status,
     ) {
     }
 
