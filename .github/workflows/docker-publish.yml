@@ -34,7 +34,7 @@ jobs:
       - name: CodeSniffer
         uses: php-actions/phpcs@v1
         with:
-          php_version: 8.1
+          php_version: 8.2
           path: src/
           standard: phpcs.xml
 
