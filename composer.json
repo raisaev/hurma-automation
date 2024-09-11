@@ -1,6 +1,6 @@
 {
     "name": "raisaev/hurma-automation",
-    "version": "1.0.0",
+    "description": "hurma-automation",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",

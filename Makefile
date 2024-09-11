@@ -41,6 +41,9 @@ release-status:
 
 #---------------------------------------------------
 
+validate:
+	make validate-cs validate-psalm
+
 validate-cs:
 	${DOCKER_COMPOSE} run -u www-data php vendor/bin/phpcs ./src
 
