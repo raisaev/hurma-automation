@@ -1,4 +1,5 @@
 parameters:
+    app.url: '%env(APP_URL))%'
     app.vnc.url: '%env(CHROME_VNC_URL)%'
 
 services:

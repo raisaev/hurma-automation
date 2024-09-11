@@ -59,7 +59,7 @@
         <a href="{{ vncUrl }}" target="_blank" class="badge badge-dark .float-right" data-toggle="tooltip" data-placement="bottom" style="font-size: 10px;">progress</a>
     </h1>
 
-    <form method="post" id="form" action="{{ url('submit') }}">
+    <form method="post" id="form" action="{{ url('submit', [], true) }}">
         <label for="sheetId" class="form-label">Sheet ID</label>
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon3">https://docs.google.com/spreadsheets/d/</span>
