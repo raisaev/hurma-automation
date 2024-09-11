@@ -29,13 +29,13 @@ jobs:
       - name: Install dependencies
         uses: php-actions/composer@v6
         with:
-          php_version: 8.2
-          args: --ignore-platform-reqs
+          php_version: 8.3
+          php_extensions: zip
 
       - name: CodeSniffer
         uses: php-actions/phpcs@v1
         with:
-          php_version: 8.2
+          php_version: 8.3
           path: src/
           standard: phpcs.xml
 
