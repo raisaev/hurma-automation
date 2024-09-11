@@ -30,6 +30,7 @@ jobs:
         uses: php-actions/composer@v6
         with:
           php_version: 8.2
+          args: --ignore-platform-reqs
 
       - name: CodeSniffer
         uses: php-actions/phpcs@v1
