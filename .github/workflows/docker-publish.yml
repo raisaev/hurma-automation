@@ -27,22 +27,14 @@ jobs:
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
 
       - name: Install dependencies
-        uses: php-actions/composer@v6
-        with:
-          php_version: 8.3
-          php_extensions: zip
+        run: composer install --no-progress --no-suggest --prefer-dist
 
       - name: CodeSniffer
-        uses: php-actions/phpcs@v1
-        with:
-          php_version: 8.3
-          path: src/
-          standard: phpcs.xml
+        run: vendor/bin/phpcs src/ --standard=phpcs.xml --report=full
 
       - name: Psalm
-        uses: docker://ghcr.io/psalm/psalm-github-actions
-        with:
-          composer_ignore_platform_reqs: true
+        if: ${{ always() }}
+        run: vendor/bin/psalm --no-cache
 
   build:
     runs-on: ubuntu-latest
