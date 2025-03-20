@@ -3,7 +3,7 @@ args = $(foreach a,$($(subst -,_,$1)_args),$(if $(value $a),$a="$($a)"))
 .ONESHELL: # Applies to every targets in the file!
 include ./docker/.env
 
-DOCKER_COMPOSE = docker-compose -f ./docker/docker-compose.yaml --env-file ./docker/.env
+DOCKER_COMPOSE = docker compose -f ./docker/docker-compose.yaml --env-file ./docker/.env
 
 #---------------------------------------------------
 

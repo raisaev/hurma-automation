@@ -86,7 +86,7 @@ class CoinProcessor
         usleep(1_000_000);
 
         $driver
-            ->findElements(WebDriverBy::xpath('//div[@class="tab-item-wrap"]'))[2]
+            ->findElements(WebDriverBy::xpath('//div[@class="tab-item-wrap"]'))[1]
             ->click();
 
         usleep(1_000_000);

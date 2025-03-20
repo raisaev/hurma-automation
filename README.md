@@ -12,10 +12,10 @@
 > https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#gcloud_4
 
 ```shell
-SERVICE_ACCOUNT_NAME=
-GOOGLE_PROJECT=
+SERVICE_ACCOUNT=hurma-automation@m2e-cloud-sales-channels-temp.iam.gserviceaccount.com
+GOOGLE_PROJECT=m2e-cloud-sales-channels-temp
 
-gcloud iam service-accounts add-iam-policy-binding ${SERVICE_ACCOUNT_NAME} \
+gcloud iam service-accounts add-iam-policy-binding ${SERVICE_ACCOUNT} \
     --role roles/iam.workloadIdentityUser \
     --member "serviceAccount:${GOOGLE_PROJECT}.svc.id.goog[hurma/hurma-automation]"
 ```
